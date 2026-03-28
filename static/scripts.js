@@ -176,7 +176,7 @@ function updatePageIndicator() {
 // ── Firebase configuration ────────────────────────────────────────────────────
 // Set FIREBASE_DB_URL to your Realtime Database URL before deploying to GitHub Pages.
 // Example: 'https://my-project-default-rtdb.firebaseio.com'
-const FIREBASE_DB_URL = 'https://YOUR-PROJECT-default-rtdb.firebaseio.com';
+const FIREBASE_DB_URL = 'https://alpine-overlay-default-rtdb.europe-west1.firebasedatabase.app/';
 
 // ── Handle incoming overlay data ──────────────────────────────────────────────
 function handleData(data) {
