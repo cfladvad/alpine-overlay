@@ -4,6 +4,65 @@ const TEST = {
   diff: '+00:00.56',
 };
 
+// ── Client-side timer interpolation ──────────────────────────────────────────
+// Rather than waiting for each Firebase update (every 200ms), the browser
+// continuously advances the displayed time using requestAnimationFrame and
+// resyncs to the authoritative value when a new update arrives.
+
+let _interpBase       = 0;     // centiseconds of last received authoritative time
+let _interpReceivedAt = 0;     // Date.now() at the moment of last resync
+let _interpRunning    = false;
+let _interpRafId      = null;
+
+function _parseCs(t) {
+  // Parses M:SS.cc / MM:SS.cc / SS.cc (period or comma decimal) → centiseconds
+  if (!t) return 0;
+  t = t.trim().replace(',', '.');
+  const parts = t.split(':');
+  let total = 0;
+  for (let i = 0; i < parts.length - 1; i++) total = total * 60 + (parseInt(parts[i], 10) || 0);
+  const last = parts[parts.length - 1];
+  const dot  = last.indexOf('.');
+  if (dot >= 0) {
+    total = total * 60 + (parseInt(last.slice(0, dot), 10) || 0);
+    total = total * 100 + parseInt(last.slice(dot + 1).padEnd(2, '0').slice(0, 2), 10);
+  } else {
+    total = (total * 60 + (parseInt(last, 10) || 0)) * 100;
+  }
+  return total;
+}
+
+function _formatCs(cs) {
+  cs = Math.max(0, cs);
+  const c  = cs % 100;
+  let   s  = Math.floor(cs / 100);
+  const m  = Math.floor(s / 60);
+  s = s % 60;
+  const cc = String(c).padStart(2, '0');
+  const ss = String(s).padStart(2, '0');
+  return m > 0 ? `${m}:${ss}.${cc}` : `${s}.${cc}`;
+}
+
+function _interpTick() {
+  if (!_interpRunning) { _interpRafId = null; return; }
+  const elapsed = Math.floor((Date.now() - _interpReceivedAt) / 10);
+  document.getElementById('currentTime').textContent = _formatCs(_interpBase + elapsed);
+  _interpRafId = requestAnimationFrame(_interpTick);
+}
+
+function _startInterp(timeStr) {
+  _interpBase       = _parseCs(timeStr);
+  _interpReceivedAt = Date.now();
+  _interpRunning    = true;
+  if (_interpRafId === null) _interpRafId = requestAnimationFrame(_interpTick);
+}
+
+function _stopInterp(displayTime) {
+  _interpRunning = false;
+  if (_interpRafId !== null) { cancelAnimationFrame(_interpRafId); _interpRafId = null; }
+  document.getElementById('currentTime').textContent = displayTime || '';
+}
+
 function applyData(d) {
   // ── Comparing / leader runner ─────────────────────────
   document.getElementById('comparingBib').textContent  = d.comparingRunner.bib;
@@ -22,8 +81,15 @@ function applyData(d) {
   document.getElementById('currentBib').textContent      = d.currentRunner.bib;
   document.getElementById('currentClub').textContent     = d.currentRunner.club;
   document.getElementById('currentName').textContent     = d.currentRunner.name;
-  document.getElementById('currentTime').textContent     = d.currentRunner.time;
   document.getElementById('currentPosition').textContent = d.currentRunner.position || '';
+
+  // ── Running time — interpolate when on course, show static when finished ───
+  const onCourse = hasCurrent && !d.currentRunner.position && d.currentRunner.time;
+  if (onCourse) {
+    _startInterp(d.currentRunner.time);   // resync authoritative value, keep RAF running
+  } else {
+    _stopInterp(d.currentRunner.time);    // runner finished or no runner — show final time
+  }
 
   // ── Time difference badge ─────────────────────────────
   const diffEl = document.getElementById('timeDifference');
@@ -176,7 +242,7 @@ function updatePageIndicator() {
 // ── Firebase configuration ────────────────────────────────────────────────────
 // Set FIREBASE_DB_URL to your Realtime Database URL before deploying to GitHub Pages.
 // Example: 'https://my-project-default-rtdb.firebaseio.com'
-const FIREBASE_DB_URL = 'https://alpine-overlay-default-rtdb.europe-west1.firebasedatabase.app/';
+const FIREBASE_DB_URL = 'https://YOUR-PROJECT-default-rtdb.firebaseio.com';
 
 // ── Handle incoming overlay data ──────────────────────────────────────────────
 function handleData(data) {
