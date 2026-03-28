@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alpine Timing Display</title>
+  <link href="static/style.css" rel="stylesheet">
+  <link rel="preload" as="image" href="static/SWE_SPORTS.svg">
+  <link rel="preload" as="image" href="static/urklogga-vector.svg">
+  <link rel="preload" as="image" href="static/craft.png">
+  <link rel="preload" as="image" href="static/klubbhuset.svg">
+  <link rel="preload" as="image" href="static/Newbody.svg">
+</head>
+<body>
+
+  <!-- Test background — hidden by default, toggled via control UI -->
+  <div id="testBg" style="display:none; position:fixed; inset:0; z-index:-1;
+       background:url('static/background.jpg') center/cover no-repeat;"></div>
+
+  <!-- Watermark — top-left corner -->
+  <img class="watermark" src="static/SWE_SPORTS.svg" alt="SweSports" />
+
+  <!-- Timing overlay — bottom of frame -->
+  <div class="timing-overlay">
+
+    <!-- Sponsor row -->
+    <div class="sponsor-bar">
+      <img src="static/urklogga-vector.svg" alt="URK" />
+      <img src="static/craft.png"           alt="Craft" />
+      <img src="static/klubbhuset.svg"      alt="Klubbhuset" />
+      <img src="static/Newbody.svg"         alt="Newbody" />
+    </div>
+
+    <!-- Leader / comparing runner bar -->
+    <div class="leader-bar" id="leaderBar">
+      <div class="leader-label">LEADER</div>
+      <div class="leader-bib"  id="comparingBib"></div>
+      <div class="leader-club" id="comparingClub"></div>
+      <div class="leader-name" id="comparingName"></div>
+      <div class="leader-time" id="comparingTime"></div>
+    </div>
+
+    <!-- Current runner bar -->
+    <div class="current-bar">
+      <div class="current-left">
+        <div class="position-badge" id="currentPosition"></div>
+        <div class="current-bib"    id="currentBib"></div>
+        <div class="current-club"   id="currentClub"></div>
+        <div class="current-name"   id="currentName"></div>
+      </div>
+      <div class="current-right">
+        <div class="current-time" id="currentTime"></div>
+        <div class="diff-badge"   id="timeDifference"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Results overlay — shown by JS when a result file is loaded -->
+  <div id="resultsOverlay" class="results-overlay" style="display:none;">
+    <div class="results-header">
+      <div class="res-title"    id="resTitle"></div>
+      <div class="res-subtitle" id="resSubtitle"></div>
+      <div class="res-status"   id="resStatus"></div>
+    </div>
+    <div class="results-carousel" id="resultsCarousel"></div>
+    <div class="res-page-indicator" id="resPageInfo"></div>
+  </div>
+
+  <script src="static/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+/* ── Reset ─────────────────────────────────────────────── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ── Page: transparent so vMix sees it as an overlay ───── */
+html, body {
+    background: transparent;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    overflow: hidden;
+    width: 1920px;
+    height: 1080px;
+}
+
+/* ── Watermark — top-left corner ───────────────────────── */
+.watermark {
+    position: absolute;
+    top: 50px;
+    left: 60px;
+    width: 130px;
+    opacity: 0.55;
+    filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+    pointer-events: none;
+}
+
+/* ── Outer wrapper — sits at the bottom of the frame ───── */
+.timing-overlay {
+    position: absolute;
+    bottom: 80px;
+    left: 60px;
+    right: 60px;
+}
+
+/* ── Sponsor row — sits just above the timing bars ─────── */
+.sponsor-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 28px;
+    padding: 0 20px 10px;
+}
+
+.sponsor-bar img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
+    opacity: 0.95;
+}
+
+/* ═══════════════════════════════════════════════════════
+   LEADER BAR  (comparing / reference runner)
+   SweSports navy panel, royal-blue left accent
+═══════════════════════════════════════════════════════ */
+.leader-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 52px;
+    padding: 0 18px;
+    background: rgba(0, 37, 122, 0.93);   /* #00257a SweSports dark blue */
+    border-left: 5px solid #0033a0;
+    margin-bottom: 3px;
+}
+
+.leader-label {
+    flex-shrink: 0;
+    background: #0033a0;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;                 /* pill — matches SweSports buttons */
+}
+
+.leader-bib {
+    flex-shrink: 0;
+    min-width: 36px;
+    color: #9bb0d8;
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.leader-club {
+    flex-shrink: 0;
+    min-width: 52px;
+    color: #7eaaff;
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.leader-name {
+    flex: 1;
+    color: #dde5f4;
+    font-size: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.leader-time {
+    flex-shrink: 0;
+    min-width: 130px;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    text-align: right;
+}
+
+/* ═══════════════════════════════════════════════════════
+   CURRENT RUNNER BAR
+   Solid black panel, royal-blue left border
+═══════════════════════════════════════════════════════ */
+.current-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    height: 76px;
+    padding: 0 20px;
+    background: rgba(0, 0, 0, 0.94);
+    border-left: 6px solid #0033a0;
+}
+
+.current-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex: 1;
+    min-width: 0;
+}
+
+.current-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* Position badge — SweSports yellow (#FECC02 Swedish gold) */
+.position-badge {
+    flex-shrink: 0;
+    min-width: 50px;
+    height: 50px;
+    background: #fecc02;
+    color: #000;
+    font-size: 28px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border-radius: 4px;
+}
+
+.position-badge:empty {
+    display: none;
+}
+
+.current-bib {
+    flex-shrink: 0;
+    min-width: 44px;
+    color: #9bb0d8;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.current-club {
+    flex-shrink: 0;
+    min-width: 58px;
+    color: #7eaaff;
+    font-size: 24px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.current-name {
+    flex: 1;
+    color: #fff;
+    font-size: 36px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.current-time {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1.5px;
+    min-width: 170px;
+    text-align: right;
+}
+
+/* ── Time difference badge ──────────────────────────────── */
+.diff-badge {
+    min-width: 140px;
+    font-size: 28px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 8px 16px;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.diff-badge:empty {
+    display: none;
+}
+
+/* Ahead: Swedish flag blue */
+.diff-badge.ahead {
+    background: #006aa7;
+}
+
+/* Behind: keep red — universal timing convention */
+.diff-badge.behind {
+    background: #cc1111;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESULTS OVERLAY — Eurosport-style, SweSports branding
+═══════════════════════════════════════════════════════ */
+/* Width ~65%, centred; height shrinks to fit actual row count */
+.results-overlay {
+    position: absolute;
+    left: 17%;
+    right: 17%;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+    background: rgba(0, 5, 30, 0.92);
+    border: 1px solid rgba(0, 51, 160, 0.5);
+    overflow: hidden;
+}
+
+.results-header {
+    flex-shrink: 0;
+    background: #0033a0;
+    padding: 14px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    min-height: 58px;
+}
+
+.res-title {
+    font-size: 26px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+.res-subtitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.res-status {
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fecc02;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+}
+
+.results-carousel {
+    flex: none;       /* height set by JS to fit actual rows */
+    overflow: hidden;
+    position: relative;
+}
+
+/* Pages stack at the top of the carousel; no bottom constraint so rows never stretch */
+.res-page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+/* Table fills the page div; browser auto-sizes every column to its widest cell */
+.res-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.res-hdr-cell {
+    height: 38px;
+    padding: 0 14px;
+    background: rgba(0, 37, 122, 0.95);
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+    border-bottom: 2px solid rgba(0, 51, 160, 0.7);
+    text-align: left;
+}
+
+/* Right-align time/gap column headers to match cell content */
+.res-hdr-4, .res-hdr-5, .res-hdr-6, .res-hdr-7 { text-align: right; }
+
+.res-cat-row td {
+    height: 43px;
+    padding: 0 14px;
+    background: rgba(0, 51, 160, 0.4);
+    font-size: 18px;
+    font-weight: 800;
+    color: #fecc02;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-left: 5px solid #fecc02;
+}
+
+.res-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.res-row:nth-child(even) {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.res-row-first {
+    background: rgba(254, 204, 2, 0.12) !important;
+}
+
+.res-row-first .res-cell-0 {
+    border-left: 5px solid #fecc02;
+}
+
+.res-cell {
+    height: 46px;
+    padding: 0 14px;
+    color: #fff;
+    font-size: 19px;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.res-cell-0 { font-weight: 900; font-size: 21px; }
+.res-cell-1 { color: #9bb0d8; font-weight: 600; }
+.res-cell-2 { font-weight: 700; font-size: 20px; }
+.res-cell-3 { color: #aabfdf; }
+
+/* Time / gap columns — right-aligned monospace */
+.res-cell-4, .res-cell-5, .res-cell-6, .res-cell-7 {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.res-page-indicator {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 7px;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.25);
+}
+
+/* ── Chroma-key mode — opaque backgrounds so capture-card keying works ─────── */
+body.chroma-mode .leader-bar          { background: rgb(0, 37, 122); }
+body.chroma-mode .current-bar         { background: #000; }
+body.chroma-mode .results-overlay     { background: rgb(0, 5, 30);
+                                        border-color: #0033a0; }
+body.chroma-mode .res-hdr-cell        { background: rgb(0, 37, 122);
+                                        border-bottom-color: #0033a0; }
+body.chroma-mode .res-cat-row td      { background: rgb(0, 51, 160); }
+body.chroma-mode .res-row:nth-child(even) { background: rgba(255,255,255,0.08); }
+body.chroma-mode .res-row-first       { background: rgba(254,204,2,0.3) !important; }
+body.chroma-mode .res-page-indicator  { background: #000; }
